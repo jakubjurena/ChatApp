@@ -48,7 +48,7 @@
 
       </div>
     
-      <div id="chat"  class="row">
+      <div id="chat" class="row">
         <div id="message-container" class="col s12">
           <div id = "messages" class="col s12">
           </div>
@@ -61,6 +61,9 @@
           </div>
           <button type = "button" name = "button" onclick = "sendMessage()" class="btn col s2">Send</button>
         </form>
+        <div class="col s12">
+          <p id="profile" class="small center-align">Logged as: xxx</p>
+        </div>
       </div>
     </div>
 
@@ -123,6 +126,7 @@
 
       socket.on("usernameSet", function(data) {
         username = data.username;
+        document.getElementById("profile").innerHTML = "Logged ad: " + username;
         document.getElementById("init").innerHTML = "";
         document.getElementById("chat").style.display = "block";
       })
