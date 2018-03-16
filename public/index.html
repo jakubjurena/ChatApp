@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Chat App</title> 
+    <meta charset="UTF-8"> 
+
+    <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!--Import materialize.css-->
+    <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
+    <link type="text/css" rel="stylesheet" href="css/main.css"/>
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  </head>
+
+  <body>
+    <!--Socket.io-->
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      const socket = io();
+    </script>
+    <!--Import jQuery before materialize.js-->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="js/materialize.min.js"></script>
+  
+    <div class="container">
+    
+      <div id="init" class="row">
+        <h3>Enter username to start chat</h3>
+
+        <div id="init-error">
+        </div>
+
+        <form class="col s6 offset-s3">
+          <div class="input-field col s12">
+            <input id="username" type="text" class="validate" required>
+            <label for="username">Username</label>
+          </div>
+          
+          <div class="btn waves-effect waves-light col s6 offset-s3" onClick="setUsername()">
+            Chat now
+          </div>
+        </form>
+
+      </div>
+    
+      <div id="chat">
+      </div>
+    </div>
+
+  
+  </body>
+</html>
