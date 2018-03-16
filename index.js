@@ -45,7 +45,7 @@ io.on("connection", function(socket) {
   });
 });
 
-http.listen(80, function(err) {
-  if (err) throw Error("Cannot start server on port 80");
-  console.log("Listening on port 80");
+http.listen(5432, function(err) {
+  if (err) throw Error("Cannot start server on port 5432");
+  console.log("Listening on port 5432");
 });
