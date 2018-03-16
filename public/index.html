@@ -23,7 +23,7 @@
       <div id="init" class="row">
         <h3>Enter username to start chat</h3>
 
-        <div id="init-error" class="col s6 offset-s3">
+        <div id="init-error" class="col m6 offset-m3">
           <div class="card red accent-4">
             <div class="card-content">
               <p id="init-error-text">
@@ -33,14 +33,14 @@
           </div>
         </div>
 
-        <div class="col s6 offset-s3">
+        <div class="col m6 offset-m3 s12">
           <form onsubmit="return onSetUsername()">
             <div class="input-field col s12">
               <input id="username" type="text" class="validate" required>
               <label for="username">Username</label>
             </div>
             
-            <div id="send-username" class="btn waves-effect waves-light col s6 offset-s3" onClick="setUsername()">
+            <div id="send-username" class="btn waves-effect waves-light col m6 offset-m3 s12" onClick="setUsername()">
               Chat now
             </div>
           </form>
@@ -48,12 +48,19 @@
 
       </div>
     
-      <div id="chat">
-        <form onsubmit="return onSendMessage()">
-          <input type = "text" id = "input-message">
-          <button type = "button" name = "button" onclick = "sendMessage()" class="btn">Send</button>
+      <div id="chat"  class="row">
+        <div id="message-container" class="col s12">
+          <div id = "messages" class="col s12">
+          </div>
+          <a id= "downButton" class="btn-floating btn-large waves-effect waves-light red"><i class="material-icons">keyboard_arrow_down</i></a>
+        </div>
+        <form onsubmit="return onSendMessage()" class="col s12 valign-wrapper">
+          <div class="input-field col s10">
+            <input id="input-message" type="text" class="validate">
+            <label for="input-message">Type your message</label>
+          </div>
+          <button type = "button" name = "button" onclick = "sendMessage()" class="btn col s2">Send</button>
         </form>
-        <div id = "message-container"></div>
       </div>
     </div>
 
@@ -96,12 +103,18 @@
       function sendMessage() {
         if (username){
           element = document.getElementById("input-message")
+          if (element.value === "") return;
           socket.emit("sendMessage", {
             message: element.value,
             username: username
           })
           element.value = ""
         }
+      }
+
+      function chatToBottom() {
+        alert("Scrolling to bottom ...");
+        window.scrollTo(0, document.querySelector("#message-container").scrollHeight);
       }
 
       socket.on("usernameExists", function(data) {
@@ -117,7 +130,7 @@
       socket.on("newMessage", function(data) {
         console.log(JSON.stringify(data));
         if (username) {
-          document.getElementById("message-container").innerHTML += 
+          document.getElementById("messages").innerHTML += 
             '<div><strong>' + data.username.replace(/</g, "&lt;").replace(/>/g, "&gt;") +
             ': </strong>' + data.message.replace(/</g, "&lt;").replace(/>/g, "&gt;") + "</div>"
         }
