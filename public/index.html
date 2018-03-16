@@ -14,11 +14,6 @@
   </head>
 
   <body>
-    <!--Socket.io-->
-    <script src="/socket.io/socket.io.js"></script>
-    <script>
-      const socket = io();
-    </script>
     <!--Import jQuery before materialize.js-->
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script type="text/javascript" src="js/materialize.min.js"></script>
@@ -28,26 +23,83 @@
       <div id="init" class="row">
         <h3>Enter username to start chat</h3>
 
-        <div id="init-error">
+        <div id="init-error" class="col s6 offset-s3">
+          <div class="card red accent-4">
+            <div class="card-content">
+              <p id="init-error-text">
+                xxx username is taken! Try some other username.
+              </p>
+            </div>
+          </div>
         </div>
 
-        <form class="col s6 offset-s3">
+        <div class="col s6 offset-s3">
           <div class="input-field col s12">
             <input id="username" type="text" class="validate" required>
             <label for="username">Username</label>
           </div>
           
-          <div class="btn waves-effect waves-light col s6 offset-s3" onClick="setUsername()">
+          <div id="send-username" class="btn waves-effect waves-light col s6 offset-s3" onClick="setUsername()">
             Chat now
           </div>
-        </form>
+        </div>
 
       </div>
     
       <div id="chat">
+        <input type = "text" id = "input-message">
+        <button type = "button" name = "button" onclick = "sendMessage()" class="btn">Send</button>
+        <div id = "message-container"></div>
       </div>
     </div>
 
   
+    <!--Socket.io-->
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      const socket = io();
+      let username;
+
+      function setUsername() {
+        socket.emit("setUsername", {
+          username: document.getElementById("username").value
+        })
+      }
+
+      function showInitError(data) {
+        document.getElementById("init-error-text").innerHTML = data.message;
+        document.getElementById("init-error").style.opacity = 1;
+      }
+
+      function sendMessage() {
+        if (username){
+          element = document.getElementById("input-message")
+          socket.emit("sendMessage", {
+            message: element.value,
+            username: username
+          })
+          element.value = ""
+        }
+      }
+
+      socket.on("usernameExists", function(data) {
+        showInitError(data);
+      })
+
+      socket.on("usernameSet", function(data) {
+        username = data.username;
+        document.getElementById("init").innerHTML = "";
+        document.getElementById("chat").style.display = "block";
+      })
+
+      socket.on("newMessage", function(data) {
+        console.log(JSON.stringify(data));
+        if (username) {
+          document.getElementById("message-container").innerHTML += 
+          '<div><strong>'+data.username+': </strong>'+data.message+"</div>"
+        }
+      })
+
+    </script>
   </body>
 </html>
