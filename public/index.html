@@ -34,21 +34,25 @@
         </div>
 
         <div class="col s6 offset-s3">
-          <div class="input-field col s12">
-            <input id="username" type="text" class="validate" required>
-            <label for="username">Username</label>
-          </div>
-          
-          <div id="send-username" class="btn waves-effect waves-light col s6 offset-s3" onClick="setUsername()">
-            Chat now
-          </div>
+          <form onsubmit="return onSetUsername()">
+            <div class="input-field col s12">
+              <input id="username" type="text" class="validate" required>
+              <label for="username">Username</label>
+            </div>
+            
+            <div id="send-username" class="btn waves-effect waves-light col s6 offset-s3" onClick="setUsername()">
+              Chat now
+            </div>
+          </form>
         </div>
 
       </div>
     
       <div id="chat">
-        <input type = "text" id = "input-message">
-        <button type = "button" name = "button" onclick = "sendMessage()" class="btn">Send</button>
+        <form onsubmit="return onSendMessage()">
+          <input type = "text" id = "input-message">
+          <button type = "button" name = "button" onclick = "sendMessage()" class="btn">Send</button>
+        </form>
         <div id = "message-container"></div>
       </div>
     </div>
@@ -60,6 +64,15 @@
       const socket = io();
       let username;
 
+      function onSetUsername() {
+        try {
+          setUsername();
+        } catch (e) {
+          throw new Error(e.message, );
+        }
+        return false;
+      }
+
       function setUsername() {
         socket.emit("setUsername", {
           username: document.getElementById("username").value
@@ -69,6 +82,15 @@
       function showInitError(data) {
         document.getElementById("init-error-text").innerHTML = data.message;
         document.getElementById("init-error").style.opacity = 1;
+      }
+
+      function onSendMessage() {
+        try {
+          sendMessage()
+        } catch (e) {
+          throw new Error(e.message, );
+        }
+        return false;
       }
 
       function sendMessage() {
