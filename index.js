@@ -26,6 +26,7 @@ io.on("connection", function(socket) {
       });
     } else {
       users.push(data.username);
+      socket.username = data.username;
       socket.emit("usernameSet", { type: "success", username: data.username });
     }
   });
@@ -33,6 +34,14 @@ io.on("connection", function(socket) {
   socket.on("sendMessage", function(data) {
     console.log("Message: " + JSON.stringify(data));
     io.sockets.emit("newMessage", data);
+  });
+
+  socket.on("disconnect", function() {
+    if (socket.username) {
+      console.log("Username " + socket.username + " removed from users array");
+      const index = users.indexOf(socket.username);
+      users.splice(index, 1);
+    }
   });
 });
 
