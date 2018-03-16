@@ -96,7 +96,8 @@
         console.log(JSON.stringify(data));
         if (username) {
           document.getElementById("message-container").innerHTML += 
-          '<div><strong>'+data.username+': </strong><xmp>'+data.message+"</xmp></div>"
+            '<div><strong>' + data.username.replace(/</g, "&lt;").replace(/>/g, "&gt;") +
+            ': </strong>' + data.message.replace(/</g, "&lt;").replace(/>/g, "&gt;") + "</div>"
         }
       })
 
