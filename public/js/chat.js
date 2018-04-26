@@ -58,6 +58,20 @@ socket.on("usernameSet", function(data) {
   document.getElementById("chat").style.display = "block";
 });
 
+socket.on("userJoin", function(data) {
+  document.getElementById("messages").innerHTML +=
+    "<div class='joined-user'><strong>" +
+    data.username.replace(/</g, "&lt;").replace(/>/g, "&gt;") +
+    "</strong> joined room </div>";
+});
+
+socket.on("userDisconnect", function(data) {
+  document.getElementById("messages").innerHTML +=
+    "<div class='discinect-user'><strong>" +
+    data.username.replace(/</g, "&lt;").replace(/>/g, "&gt;") +
+    "</strong> disconnected </div>";
+});
+
 socket.on("newMessage", function(data) {
   console.log(JSON.stringify(data));
   if (username) {

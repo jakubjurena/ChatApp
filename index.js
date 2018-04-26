@@ -27,7 +27,10 @@ io.on("connection", function(socket) {
     } else {
       users.push(data.username);
       socket.username = data.username;
+      //for logged user
       socket.emit("usernameSet", { type: "success", username: data.username });
+      //broadcast
+      io.sockets.emit("userJoin", { username: data.username });
     }
   });
 
@@ -39,6 +42,7 @@ io.on("connection", function(socket) {
   socket.on("disconnect", function() {
     if (socket.username) {
       console.log("Username " + socket.username + " removed from users array");
+      io.sockets.emit("userDisconnect", { username: socket.username });
       const index = users.indexOf(socket.username);
       users.splice(index, 1);
     }
